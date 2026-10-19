@@ -4,7 +4,7 @@
 
 <img src="screenshots/shot_emery_green.png" alt="Emery, green board"> <img src="screenshots/shot_emery_blue.png" alt="Emery, blue board"> <img src="screenshots/shot_emery_red.png" alt="Emery, red board"> <img src="screenshots/shot_gabbro_green.png" alt="Gabbro, green board"> <img src="screenshots/shot_gabbro_blue.png" alt="Gabbro, blue board"> <img src="screenshots/shot_gabbro_red.png" alt="Gabbro, red board">
 
-A Pebble watchface (v1.0.0).
+A Pebble watchface (v1.0.1).
 
 Circuit turns your watch into a populated circuit board. Copper traces run
 between the parts, vias and gold pads line the edges, and every reading has
@@ -57,6 +57,11 @@ screenshots, enable `DEMO` at the top of `src/c/circuit.c`; it fills the
 chips with fixed sample values and lets `DEMO_BOARD` pick the colour.
 
 ## Release notes
+
+### 1.0.1
+
+The time now sits exactly in the middle of its window; it was three pixels
+too low.
 
 ### 1.0.0
 

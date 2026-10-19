@@ -80,7 +80,7 @@ static const Theme THEMES[] = {
 #define LED_H            5
 #define ROW_H            18
 #define WINDOW_RADIUS    4
-#define TIME_Y_NUDGE     6      // LECO-Box hat oben mehr Luft als unten
+#define TIME_Y_NUDGE     9      // LECO-Box hat oben mehr Luft als unten (gemessen)
 #define ICON_W           22
 #define ICON_H           20
 

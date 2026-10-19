@@ -44,6 +44,10 @@ Watchfaces (Health / Weather)
 
 RELEASE NOTES
 
+1.0.1
+
+The time now sits exactly in the middle of its window; it was three pixels too low.
+
 1.0.0
 
 First release.
