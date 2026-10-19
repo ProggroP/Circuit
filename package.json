@@ -1,0 +1,42 @@
+{
+    "author": "Axel Kark",
+    "dependencies": {
+        "@rebble/clay": "1.0.8"
+    },
+    "keywords": [
+        "pebble-app",
+        "watchface",
+        "circuit"
+    ],
+    "name": "circuit",
+    "pebble": {
+        "capabilities": [
+            "configurable",
+            "health",
+            "location"
+        ],
+        "displayName": "Circuit",
+        "enableMultiJS": true,
+        "messageKeys": [
+            "BOARD",
+            "TEMP_UNIT",
+            "TEMP",
+            "CONDITION",
+            "REQUEST_WEATHER"
+        ],
+        "projectType": "native",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "emery",
+            "gabbro"
+        ],
+        "uuid": "5b782fa7-8dd6-4db3-84b9-af270ef97b33",
+        "watchapp": {
+            "watchface": true
+        }
+    },
+    "version": "1.0.0"
+}

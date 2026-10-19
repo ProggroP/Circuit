@@ -1,0 +1,60 @@
+[
+  {
+    "type": "heading",
+    "defaultValue": "Circuit"
+  },
+  {
+    "type": "text",
+    "defaultValue": "A watchface that looks like a circuit board. The chips show the weather, battery, date, heart rate and today's activity."
+  },
+  {
+    "type": "section",
+    "items": [
+      {
+        "type": "heading",
+        "defaultValue": "Board"
+      },
+      {
+        "type": "select",
+        "messageKey": "BOARD",
+        "label": "Solder mask colour",
+        "defaultValue": "0",
+        "options": [
+          { "label": "Green", "value": "0" },
+          { "label": "Blue", "value": "1" },
+          { "label": "Red", "value": "2" },
+          { "label": "Black", "value": "3" },
+          { "label": "Purple", "value": "4" }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "section",
+    "items": [
+      {
+        "type": "heading",
+        "defaultValue": "Weather"
+      },
+      {
+        "type": "select",
+        "messageKey": "TEMP_UNIT",
+        "label": "Temperature unit",
+        "defaultValue": "auto",
+        "options": [
+          { "label": "Automatic (phone region)", "value": "auto" },
+          { "label": "Celsius", "value": "celsius" },
+          { "label": "Fahrenheit", "value": "fahrenheit" }
+        ]
+      },
+      {
+        "type": "text",
+        "defaultValue": "Weather comes from <a href=\"https://open-meteo.com\">Open-Meteo</a> for your current location, every 30 minutes. No account needed."
+      }
+    ]
+  },
+  {
+    "type": "submit",
+    "defaultValue": "Save"
+  }
+]

@@ -1,0 +1,49 @@
+CIRCUIT - Rebble App Store listing
+
+Wird bei jeder Veroeffentlichung mit aktualisiert. Englisch, weil der Store international ist. Reiner Text, ein Absatz pro Zeile, damit sich die Abschnitte ohne Nacharbeit in die Store-Felder uebernehmen lassen.
+
+-------------------------------------------------------------------------
+
+TITLE
+
+Circuit
+
+
+TAGLINE
+
+Your day, soldered onto a circuit board.
+
+
+DESCRIPTION
+
+Circuit turns your watch into a populated circuit board. Copper traces run between the parts, vias and gold pads line the edges, and every reading has its own chip: weather, battery, date, heart rate and today's activity.
+
+It looks busy, but it reads at a glance. Every value is set in white on a black chip, the board itself is only scenery, and the time sits large in a dark window in the middle of the board.
+
+What the chips show: the current temperature with a weather symbol, refreshed every 30 minutes. Battery level, labelled CHG while charging. Weekday and date. Your heart rate on Pebble Time 2. Steps, distance and active calories for today. A small LED glows green while the phone is connected and turns red when the connection drops, and the AM, PM and 24H markers on the board light up to match your time format.
+
+Pick the solder mask colour you like best: classic green, blue, red, black or purple.
+
+Both displays get their own board. Pebble Time 2 has a rectangular layout with gold edge fingers and the heart rate chip. Pebble Round 2 arranges the chips around the time, with a ring of plated holes along the rim; it has no heart rate sensor, so the date gets that spot.
+
+Weather comes from Open-Meteo for your current location. No account and no API key are needed. Distance follows the unit set in the Pebble app.
+
+
+SETTINGS
+
+- Solder mask colour - green, blue, red, black or purple.
+- Temperature unit - automatic (by phone region), Celsius or Fahrenheit.
+
+12 or 24 hour format follows the watch setting.
+
+
+CATEGORY
+
+Watchfaces (Health / Weather)
+
+
+RELEASE NOTES
+
+1.0.0
+
+First release.
