@@ -70,8 +70,12 @@ static const Theme THEMES[] = {
 #define TRACE_W          2
 #define VIA_R            3
 #define VIA_HOLE_R       1
-#define SMD_LONG         7
-#define SMD_SHORT        4
+#define SMD_LONG         11
+#define SMD_SHORT        6
+#define SMD_END          3      // Metallkappe an beiden Enden
+#define SOT_W            9
+#define SOT_H            5
+#define SOT_LEG          2
 #define LED_W            8
 #define LED_H            5
 #define ROW_H            18
@@ -124,6 +128,7 @@ static const Theme THEMES[] = {
 
 #define SMD_CAP          0
 #define SMD_RES          1
+#define SMD_SOT          2      // Transistor im SOT-23-Gehaeuse, Lage egal
 
 typedef struct { int16_t x, y; uint8_t kind; bool vertical; } Smd;
 typedef struct { int16_t x, y; const char *text; } Silk;
@@ -132,23 +137,35 @@ typedef struct { int16_t x, y; const char *text; } Silk;
 static const int16_t TRACES[] = {
   93, 22,  102, 22,  108, 16,  134, 16,  TRACE_VIA,
   93, 46,  100, 46,  106, 40,  130, 40,  TRACE_VIA,
-  93, 58,  98, 58,  98, 66,  TRACE_OPEN,
   12, 3,  134, 3,  TRACE_VIA,
   7, 24,  3, 28,  3, 62,  TRACE_VIA,
   4, 139,  78, 139,  84, 145,  84, 196,  86, 198,  86, 226,  TRACE_OPEN,
   108, 139,  188, 139,  TRACE_VIA,
   192, 30,  197, 30,  197, 64,  TRACE_VIA,
 };
+// Moeglichst auf den Leiterbahnen, wie auf einer echten Platine
 static const Smd SMDS[] = {
-  { 98, 56, SMD_CAP, false },
-  { 108, 56, SMD_RES, false },
-  { 1, 100, SMD_CAP, true },
-  { 1, 116, SMD_RES, true },
-  { 96, 135, SMD_CAP, false },
+  { 30, 0, SMD_RES, false },
+  { 66, 0, SMD_CAP, false },
+  { 115, 13, SMD_RES, false },
+  { 112, 37, SMD_CAP, false },
+  { 96, 30, SMD_SOT, false },
+  { 96, 50, SMD_CAP, false },
+  { 96, 60, SMD_RES, false },
+  { 1, 78, SMD_CAP, true },
+  { 1, 96, SMD_RES, true },
+  { 1, 114, SMD_CAP, true },
+  { 22, 136, SMD_CAP, false },
+  { 56, 136, SMD_RES, false },
+  { 122, 136, SMD_RES, false },
+  { 160, 136, SMD_CAP, false },
+  { 194, 38, SMD_RES, true },
+  { 194, 150, SMD_CAP, true },
+  { 194, 196, SMD_RES, true },
 };
 static const Silk SILKS[] = {
-  { 112, 5, "R21" },
-  { 98, 59, "C9" },
+  { 113, 3, "R21" },
+  { 109, 51, "C9" },
 };
 #else
 static const int16_t TRACES[] = {
@@ -164,7 +181,7 @@ static const int16_t TRACES[] = {
   234, 138,  256, 138,  TRACE_OPEN,
   234, 152,  256, 152,  TRACE_OPEN,
   234, 162,  248, 162,  TRACE_VIA,
-  71, 202,  58, 202,  46, 190,  TRACE_VIA,
+  71, 202,  58, 202,  50, 194,  TRACE_VIA,
   71, 226,  60, 226,  50, 216,  TRACE_VIA,
   189, 226,  198, 226,  206, 218,  TRACE_VIA,
   189, 208,  216, 208,  222, 202,  TRACE_VIA,
@@ -176,16 +193,20 @@ static const int16_t TRACES[] = {
   205, 109,  205, 114,  TRACE_OPEN,
 };
 static const Smd SMDS[] = {
-  { 62, 54, SMD_RES, false },
-  { 190, 54, SMD_CAP, false },
-  { 30, 182, SMD_CAP, false },
-  { 42, 182, SMD_RES, false },
-  { 220, 182, SMD_CAP, false },
+  { 60, 52, SMD_RES, false },
+  { 188, 52, SMD_CAP, false },
+  { 78, 40, SMD_CAP, true },
+  { 176, 40, SMD_RES, true },
+  { 24, 180, SMD_CAP, false },
+  { 38, 180, SMD_RES, false },
+  { 216, 180, SMD_CAP, false },
+  { 96, 178, SMD_RES, false },
+  { 152, 178, SMD_CAP, false },
 };
 static const Silk SILKS[] = {
-  { 62, 57, "R13" },
-  { 190, 57, "C22" },
-  { 30, 185, "C3" },
+  { 60, 59, "R13" },
+  { 188, 59, "C22" },
+  { 24, 187, "C3" },
 };
 #endif
 
@@ -273,18 +294,37 @@ static void draw_traces(GContext *ctx, const Theme *t) {
   }
 }
 
+static GRect smd_rect(const Smd *s) {
+  if (s->kind == SMD_SOT) return GRect(s->x, s->y - SOT_LEG, SOT_W, SOT_H + 2 * SOT_LEG);
+  return s->vertical ? GRect(s->x, s->y, SMD_SHORT, SMD_LONG)
+                     : GRect(s->x, s->y, SMD_LONG, SMD_SHORT);
+}
+
+static void draw_sot(GContext *ctx, const Smd *s) {
+  graphics_context_set_fill_color(ctx, COLOR_SMD_END);
+  graphics_fill_rect(ctx, GRect(s->x + 1, s->y + SOT_H, SOT_LEG, SOT_LEG), 0, GCornerNone);
+  graphics_fill_rect(ctx, GRect(s->x + SOT_W - 1 - SOT_LEG, s->y + SOT_H, SOT_LEG, SOT_LEG),
+                     0, GCornerNone);
+  graphics_fill_rect(ctx, GRect(s->x + (SOT_W - SOT_LEG) / 2, s->y - SOT_LEG, SOT_LEG, SOT_LEG),
+                     0, GCornerNone);
+  graphics_context_set_fill_color(ctx, COLOR_RES);
+  graphics_fill_rect(ctx, GRect(s->x, s->y, SOT_W, SOT_H), 0, GCornerNone);
+}
+
 static void draw_smds(GContext *ctx) {
   for (int i = 0; i < (int)ARRAY_LENGTH(SMDS); i++) {
     const Smd *s = &SMDS[i];
-    int w = s->vertical ? SMD_SHORT : SMD_LONG;
-    int h = s->vertical ? SMD_LONG : SMD_SHORT;
+    if (s->kind == SMD_SOT) { draw_sot(ctx, s); continue; }
+    GRect r = smd_rect(s);
     graphics_context_set_fill_color(ctx, COLOR_SMD_END);
-    graphics_fill_rect(ctx, GRect(s->x, s->y, w, h), 0, GCornerNone);
+    graphics_fill_rect(ctx, r, 0, GCornerNone);
     graphics_context_set_fill_color(ctx, s->kind == SMD_CAP ? COLOR_CAP : COLOR_RES);
     if (s->vertical) {
-      graphics_fill_rect(ctx, GRect(s->x, s->y + 2, w, h - 4), 0, GCornerNone);
+      graphics_fill_rect(ctx, GRect(r.origin.x, r.origin.y + SMD_END, r.size.w,
+                                    r.size.h - 2 * SMD_END), 0, GCornerNone);
     } else {
-      graphics_fill_rect(ctx, GRect(s->x + 2, s->y, w - 4, h), 0, GCornerNone);
+      graphics_fill_rect(ctx, GRect(r.origin.x + SMD_END, r.origin.y,
+                                    r.size.w - 2 * SMD_END, r.size.h), 0, GCornerNone);
     }
   }
 }
@@ -678,6 +718,9 @@ static void draw_edge(GContext *ctx, const Theme *t) {
     bool blocked = false;
     for (int b = 0; b < (int)ARRAY_LENGTH(blocks); b++) {
       if (near_rect(p, blocks[b], RIM_CLEARANCE)) { blocked = true; break; }
+    }
+    for (int i = 0; !blocked && i < (int)ARRAY_LENGTH(SMDS); i++) {
+      if (near_rect(p, smd_rect(&SMDS[i]), RIM_CLEARANCE)) blocked = true;
     }
     // auch nicht auf Endpunkte von Leiterbahnen
     for (int i = 0; !blocked && i + 1 < (int)ARRAY_LENGTH(TRACES); ) {
